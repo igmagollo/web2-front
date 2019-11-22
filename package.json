@@ -3,9 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios-observable": "^1.1.2",
+    "bootstrap": "^4.3.1",
+    "classnames": "^2.2.6",
+    "font-awesome": "^4.7.0",
+    "primeflex": "^1.0.0",
+    "primeicons": "^2.0.0",
+    "primereact": "^3.3.2",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
-    "react-scripts": "3.2.0"
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.2.0",
+    "rxjs": "^6.5.3"
   },
   "scripts": {
     "start": "react-scripts start",
