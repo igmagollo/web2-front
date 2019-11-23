@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import {Sidebar} from 'primereact/sidebar';
 import {Menu} from 'primereact/menu';
 import {SideMenuService} from './side-menu-service.js';
-import {withRouter} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
+import {Button} from 'primereact/button';
 
 class SideMenu extends React.Component {
 	static propTypes = {
@@ -24,12 +25,12 @@ class SideMenu extends React.Component {
 						{ label: 'Hotéis', },
 						{ label: 'Promoções', },
 					],
-				}
+				},
+				{ separator: true },
+				{ label: 'Entrar', command: () => this.navigate('/login')}
 			],
 			visible: false,
 		};
-
-		
 	}
 
 	navigate(url) {

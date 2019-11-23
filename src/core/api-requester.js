@@ -1,16 +1,19 @@
 import Axios from 'axios-observable';
-import {api} from './config.js';
+import { Instance as Http } from './axios-instance';
+import User from './user-service';
 
 export class ApiRequester {
 	constructor(path) {
-		this.api = api;
 		this.path = path;
 		if (this.path[-1] != '/')
-			this.path + '/';
+			this.path += '/';
+		this.Http = Http;
+		this.user = User.getInstance();
 	}
 
 	list() {
-		return Axios.get(this.api + this.path);
+		const request = this.Http.get(this.path);
+		return request;
 	}
 
 	retrieve(id) {
@@ -18,11 +21,12 @@ export class ApiRequester {
 	}
 
 	create(data) {
-		return Axios.post(this.api + this.path + id, data);
+		const request = this.Http.post(this.path, data);
+		return request;
 	}
 
 	update(data) {
-		return Axios.post(this.api + this.path + id, data);	
+		return Axios.post(this.api + this.path + data.id, data);	
 	}
 
 	destroy(id) {
