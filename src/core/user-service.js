@@ -16,7 +16,6 @@ export default class User {
     }
 
     verifyLogin(callback) {
-        console.log(Cookie.getCookie('auth'));
         if (Cookie.getCookie('auth')) {
             Http.get('test-auth/', {
                 headers: {
@@ -24,13 +23,13 @@ export default class User {
                 }
             }).subscribe(
                 (response) => {
-                    this.date = response.data;
+                    this.data = response.data;
                     this.isLoggedIn = true;
-                    callback();
+                    callback(true);
                 },
                 (err) => {
                     this.isLoggedIn = false;
-                    callback();
+                    callback(false);
                 }
             )
         } else {

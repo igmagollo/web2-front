@@ -73,6 +73,12 @@ class SideMenu extends React.Component {
 			<div>
 				<Sidebar visible={this.state.visible} onHide={SideMenuService.hideMenu}>
 					<h1 style={{fontWeight:'normal'}}>Menu</h1>
+					{
+						User.getInstance().isLoggedIn &&
+						<h2 style={{fontWeight:'normal', color: 'green'}}>
+							Olá, {User.getInstance().getUserData().nome}
+						</h2>
+					}
 					<Menu model={this.state.menuitems}/>
 				</Sidebar>
 			</div>

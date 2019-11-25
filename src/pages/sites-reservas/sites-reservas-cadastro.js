@@ -69,15 +69,18 @@ class SitesReservasCadastro extends React.Component {
         this.setState({falha_cadastro_texto: message});
     }
 
-    submit() {
+    submit(e) {
+        if (e) e.preventDefault();
         if (this.cantSubmit()) return;
         this.setSubmitting();
         this.service.create(this.getFormData()).subscribe(
             (data) => {
-                PopupMessagesService.success("Cadastro Efetuado com Sucesso.");
+                PopupMessagesService.success("Cadastro efetuado com sucesso.");
                 this.props.history.push('/');
             },
-            (err) => this.setError("Ocorreu um erro durante o cadastro.")
+            (err) => {
+                this.setError(err.response.data.msg);
+            }
         );
     }
 
@@ -90,6 +93,7 @@ class SitesReservasCadastro extends React.Component {
                       <Redirect to='/' />
                 }
                 <Card title="Cadastro de Site de Reservas" style={{width: "100%"}}>
+                    <form onSubmit={(e) => this.submit(e)}>
                     <div className="p-grid">
                         <div className="p-col p-col-12 p-md-6 p-lg-3">
                             <FormInputText 
@@ -137,6 +141,7 @@ class SitesReservasCadastro extends React.Component {
                             />
                         </div>
                     </div>
+                    </form>
                 </Card>
             </div>
         );

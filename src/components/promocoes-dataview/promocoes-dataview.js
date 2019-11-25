@@ -8,71 +8,60 @@ class PromocoesDataview extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-            promocoes: [],
             selected: {},
             layout: 'grid',
             visible: false
-		};
-    }
-    
-    renderListItem(promo) {
-        return (
-            <div className="p-col-12">
-                <div>
-                    <div class="p-grid">
-                        <div className="p-col-12">Hotel: <b>{promo.hotel.nome}</b></div>
-                        <div className="p-col-12">Preço: <b>R$ {promo.preco},00</b></div>
-                        <Button icon="pi pi-search" onClick={(e) => this.setState({ selected: promo, visible: true })}></Button>
-                    </div>
-                </div>
-            </div>
-        );
+        };
+        this.itemTemplate = this.itemTemplate.bind(this);
     }
 
-    renderGridItem(promo) {
+	itemTemplate(promo, layout) {
+        if (!promo) return null;
+        const dateInicio = new Date(promo.data_inicio);
+        const strInicio = 
+            dateInicio.getDate() + '/' 
+            + ((dateInicio.getMonth() + 1 < 10 ) ? '0' + dateInicio.getMonth() + 1 : dateInicio.getMonth() + 1 )
+            + '/' + dateInicio.getFullYear();
+        const dateFim = new Date(promo.data_fim);
+        const strFim = 
+            dateFim.getDate() + '/' 
+            + ((dateFim.getMonth() + 1 < 10 ) ? '0' + dateFim.getMonth() + 1 : dateFim.getMonth() + 1 )
+            + '/' + dateFim.getFullYear();
+
         return (
-            <div style={{ padding: '.5em' }} className="p-col-12 p-md-3">
-                <Card header={promo.hotel.nome} style={{ textAlign: 'center' }}>
-                    <div><b>R$ {promo.preco}</b>,00</div>
-                    <Button icon="pi pi-search" onClick={(e) => this.setState({ selected: promo, visible: true })}></Button>
+            <div className="p-grid p-col-12 p-md-3" style={{margin: 0}}>
+                <Card title={promo.hotel.nome}
+                    style={{ textAlign: 'center', border: 'solid 1px rgba(0,0,0,.3)', width: "100%" }}     
+                >
+                        <div><h3 style={{ color: 'green' }}>R$ {promo.preco},00</h3></div>
+                        <div>{strInicio} - {strFim}</div>
+                        <div>Disponível em: <a>{promo.site.url}</a></div>
                 </Card>
             </div>
         );
     }
 
-	itemTemplate(promo, layout) {
-        if (!promo) {
-            return;
-        }
-
-        if (layout === 'list')
-            return this.renderListItem(promo);
-        else if (layout === 'grid')
-            return this.renderGridItem(promo);
-    }
-
     renderHeader() {
 
         return (
-            <div className="p-grid">
-                <div className="p-col-12" style={{textAlign: 'left'}}>
-                    
-                </div>
-            </div>
+            <h2 style={{textAlign: 'left', margin: 0 }}>{this.props.title}</h2>
         );
     }
 
 	render() {
+        const header = this.renderHeader();
+
 		return (
-			<div className="container">
-				<Card title="Promoções">
-					<DataView
-						value={this.state.promocoes}
-						paginator={false}
-					>
-					</DataView>
-				 </Card>
-			</div>
+            <div style={{marginTop: 16}}>
+            <DataView
+                value={this.props.promocoes}
+                layout={this.state.layout}
+                header={header}
+                itemTemplate={this.itemTemplate}
+                paginatorPosition={'both'} paginator={true} rows={12}
+            >
+            </DataView>
+            </div>
 		);
 	}
 }

@@ -13,7 +13,6 @@ import PropTypes from "prop-types";
 import {withRouter, Redirect} from 'react-router-dom';
 import {PromocoesService} from '../../services/promocoes-service';
 import {SitesReservaService} from '../../services/sites-reserva-service';
-import {HoteisService} from '../../services/hoteis-service';
 import {PopupMessagesService} from '../../components/popup-messages/popup-messages-service';
 import { forkJoin } from 'rxjs';
 
@@ -29,10 +28,8 @@ class PromocoesCadastro extends React.Component {
 
         this.state = {
             sites_reservas_options: [],
-            hoteis_options: [],
             site: new FormControl('', [ required ]),
             preco: new FormControl('', [ required ]),
-            cnpj: new FormControl('', [ required ]),
             inicio: new FormControl('', [ required ]),
             fim: new FormControl('', [ required ]),
             falha_cadastro: false,
@@ -43,24 +40,20 @@ class PromocoesCadastro extends React.Component {
         
         this.service = new PromocoesService();
         this.sites_service = new SitesReservaService();
-        this.hoteis_service = new HoteisService();
     }
 
     componentDidMount() {
         forkJoin(
             {
-                sites: this.sites_service.list(),
-                hoteis: this.hoteis_service.list()
+                sites: this.sites_service.list()
             }
         ).subscribe(
             (response) => {
                 this.setState({sites_reservas_options: response.sites.data});
-                this.setState({hoteis_options: response.hoteis.data});
                 this.setState({hasOptions: true});
             },
             (err) => {
                 this.setState({sites_reservas_options: []});
-                this.setState({hoteis_options: []});
             }
         );
     }
@@ -69,7 +62,7 @@ class PromocoesCadastro extends React.Component {
         return {
             site: this.state.site.value.id,
             preco: this.state.preco.value,
-            hotel: this.state.cnpj.value.id,
+            hotel: User.getInstance().getUserData().id,
             data_inicio: this.state.inicio.value.toJSON(),
             data_fim: this.state.fim.value.toJSON()
         }
@@ -93,7 +86,6 @@ class PromocoesCadastro extends React.Component {
 
     cantSubmit() {
         return (
-            !this.state.cnpj.isValid() ||
             !this.state.preco.isValid() ||
             !this.state.inicio.isValid() ||
             !this.state.fim.isValid() ||
@@ -101,16 +93,19 @@ class PromocoesCadastro extends React.Component {
         );
     }
 
-    submit() {
+    submit(e) {
+        if (e) e.preventDefault();
         if (this.cantSubmit()) return;
         console.log(this.getFormData());
         this.setSubmitting();
         this.service.create(this.getFormData()).subscribe(
             (data) => {
-                PopupMessagesService.success("Cadastro Efetuado com Sucesso.");
+                PopupMessagesService.success("Cadastro efetuado com sucesso.");
                 this.props.history.push('/');
             },
-            (err) => this.setError("Ocorreu um erro durante o cadastro.")
+            (err) => {
+                this.setError(err.response.data.msg);
+            }
         );
     }
 
@@ -123,8 +118,9 @@ class PromocoesCadastro extends React.Component {
                       <Redirect to='/' />
                 }
                 <Card title="Cadastro de Promoções" style={{width: "100%"}}>
+                    <form onSubmit={(e) => this.submit(e)}>
                     <div className="p-grid p-fluid">
-                        <div className="p-col p-col-12 p-md-4">
+                        <div className="p-col p-col-12 p-md-6">
                             <FormInputSelect
                                 label="Endereço/URL do Site de Reservas" 
                                 options={this.state.sites_reservas_options}
@@ -135,18 +131,7 @@ class PromocoesCadastro extends React.Component {
                                 disabled={!this.state.hasOptions}
                             />
                         </div>
-                        <div className="p-col p-col-12 p-md-4">
-                            <FormInputSelect
-                                label="CNPJ do Hotel" 
-                                options={this.state.hoteis_options}
-                                optionLabel="cnpj"
-                                formControl={this.state.cnpj}
-                                onChange={(e) => this.setValue('cnpj', e.value)}
-                                onBlur={(e) => this.setValue('cnpj', e.value)}
-                                disabled={!this.state.hasOptions}
-                            />
-                        </div>
-                        <div className="p-col p-col-12 p-md-4">
+                        <div className="p-col p-col-12 p-md-6">
                             <FormInputText 
                                 label="Preço"
                                 addonBefore="R$"
@@ -185,6 +170,7 @@ class PromocoesCadastro extends React.Component {
                             />
                         </div>
                     </div>
+                    </form>
                 </Card>
             </div>
         );

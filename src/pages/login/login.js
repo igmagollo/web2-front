@@ -10,6 +10,7 @@ import {ErrorMessage} from '../../components/error-message/error-message';
 import {SideMenuService} from '../../components/side-menu/side-menu-service';
 import {CookieService} from '../../core/cookie-service';
 import User from '../../core/user-service';
+import {PopupMessagesService} from '../../components/popup-messages/popup-messages-service';
 
 
 class Login extends React.Component {
@@ -48,7 +49,8 @@ class Login extends React.Component {
         this.setState({isLoading: false});
     }
     
-    submit() {
+    submit(e) {
+        if (e) e.preventDefault();
         if (this.state.username_error || this.state.password_error) return;
         const data = {
             username: this.state.username,
@@ -62,6 +64,7 @@ class Login extends React.Component {
                 User.getInstance().isLoggedIn = true;
                 User.getInstance().data = response.data;
                 SideMenuService.sendUpdate();
+                PopupMessagesService.success(`Login efetuado com sucesso. Olá, ${response.data.nome}.`)
                 this.props.history.push('/');
             },
             (err) => {
@@ -75,6 +78,7 @@ class Login extends React.Component {
             <div className="container">
                 <div className="p-grid p-justify-center">
                     <Card title="Login" className="p-col" style={{ maxWidth: 400 }}>
+                        <form onSubmit={(e) => this.submit(e)}>
                         <div className="p-col">
                             <InputText 
                                 placeholder="Nome de Usuário"
@@ -129,6 +133,7 @@ class Login extends React.Component {
                                 }
                             />
                         </div>
+                        </form>
                     </Card>
                 </div>
             </div>

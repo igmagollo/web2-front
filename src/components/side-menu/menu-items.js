@@ -1,4 +1,5 @@
 import {SideMenuService} from './side-menu-service';
+import {PopupMessagesService} from '../popup-messages/popup-messages-service';
 import User from '../../core/user-service';
 
 export const CadastroSiteReservas = (navigate) => {
@@ -36,7 +37,7 @@ export const Promocoes = (navigate) => {
 export const MinhasPromocoesSite = (navigate) => {
     return {
         label: 'Minhas Promoções',
-        command: () => navigate('/'),
+        command: () => navigate('/minhas-promocoes'),
         icon: 'pi pi-dollar'
     };
 }
@@ -44,7 +45,7 @@ export const MinhasPromocoesSite = (navigate) => {
 export const MinhasPromocoesHotel = (navigate) => {
     return {
         label: 'Minhas Promoções',
-        command: () => navigate('/'),
+        command: () => navigate('/minhas-promocoes'),
         icon: 'pi pi-dollar'
     };
 }
@@ -63,7 +64,8 @@ export const Sair = (navigate) => {
         command: () => {
             User.getInstance().logout();
             SideMenuService.sendUpdate();
-            navigate('/');
+            PopupMessagesService.info("Você fez logout do Sistema.");
+            navigate('/login');
         },
         icon: 'pi pi-sign-out',
     };

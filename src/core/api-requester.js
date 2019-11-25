@@ -14,7 +14,6 @@ export class ApiRequester {
 
 	getOptions() {
 		const options = {};
-		console.log("Ta logado?", this.user.isLoggedIn);
 		if (this.user.isLoggedIn) {
 			options['headers'] = {
 				Authorization: `Token ${CookieService.getCookie('auth')}`

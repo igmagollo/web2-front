@@ -5,11 +5,14 @@ import SideMenu from './components/side-menu/side-menu.js';
 import login from './pages/login/login';
 import Bootstrap from './pages/bootstrap/bootstrap';
 import {TopMenu} from './components/top-menu/top-menu.js';
-import SitesReservas from './pages/sites-reservas/sites-reservas.js';
 import SitesReservasCadastro from './pages/sites-reservas/sites-reservas-cadastro';
 import HoteisCadastro from './pages/hoteis/hoteis-cadastro';
 import PromocoesCadastro from './pages/promocoes/promocoes-cadastro';
 import {PopupMessages} from './components/popup-messages/popup-messages';
+import {SideMenuService} from './components/side-menu/side-menu-service';
+import {PopupMessagesService} from './components/popup-messages/popup-messages-service';
+import MinhasPromocoes from './pages/minhas-promocoes/minhas-promocoes';
+
 
 import {
   Switch,
@@ -42,7 +45,13 @@ class App extends React.Component {
 
   bootstrap() {
     this.user.verifyLogin(
-      () => this.setState({bootstraping: false})
+      (foi) => {
+        this.setState({bootstraping: false});
+        SideMenuService.sendUpdate();
+        if (foi) {
+          PopupMessagesService.success(`Bem vindo novamente, ${this.user.getUserData().nome}.`)
+        }
+      }
     ); 
   }
 
@@ -55,10 +64,10 @@ class App extends React.Component {
         <Switch>
           <Route exact path="/" component={Home}/>
           <Route exact path="/login" component={login}/>
-          <Route exact path="/sites-reservas" component={SitesReservas}/>
           <Route exact path="/sites-reservas/cadastro" component={SitesReservasCadastro}/>
           <Route exact path="/hoteis/cadastro" component={HoteisCadastro}/>
           <Route exact path="/promocoes/cadastro" component={PromocoesCadastro}/>
+          <Route exact path="/minhas-promocoes" component={MinhasPromocoes}/>
         </Switch>
       </div>
     );
