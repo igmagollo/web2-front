@@ -9,7 +9,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f1f1f1;
+  background-color: #f2f5f7;
 }
 
 code {
@@ -23,7 +23,7 @@ code {
   border-right: 0;
   border-left: 0;
   border-top: 0;
-  background-color: #222222; 
+  background-color: #007ad9; 
 }
 
 .top-menu .p-menuitem-text {
@@ -48,7 +48,7 @@ code {
 }
 
 .top-menu .p-menuitem-link:hover {
-  background-color: #555555 !important;
+  background-color: #5ca0d4 !important;
 }
 
 .p-menu, .p-menu-list {

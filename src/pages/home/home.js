@@ -1,18 +1,26 @@
 import React from 'react';
-import style from './home.css';
+import {DataView, DataViewLayoutOptions} from 'primereact/dataview';
+import {Card} from 'primereact/card';
 
 
 class Home extends React.Component {
 
 	constructor() {
 		super();
-		this.state = {	
+		this.state = {
+			promocoes: [],
 		};
+	}
+
+	itemTemplate() {
+		
 	}
 
 	render() {
 		return (
 			<div className="container">
+				<Card title="Promoções">
+				 </Card>
 			</div>
 		);
 	}

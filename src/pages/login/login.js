@@ -1,12 +1,15 @@
 import React from 'react';
 import {InputText} from 'primereact/inputtext';
 import PropTypes from "prop-types";
-import {Instance as Http, setAuth} from '../../core/axios-instance';
+import {Instance as Http} from '../../core/axios-instance';
 import {withRouter} from 'react-router-dom';
 import {Card} from 'primereact/card';
 import {Button} from 'primereact/button';
 import {LoadingBar} from '../../components/loading-bar/loading-bar';
 import {ErrorMessage} from '../../components/error-message/error-message';
+import {SideMenuService} from '../../components/side-menu/side-menu-service';
+import {CookieService} from '../../core/cookie-service';
+import User from '../../core/user-service';
 
 
 class Login extends React.Component {
@@ -53,9 +56,12 @@ class Login extends React.Component {
         };
         if (!data.username || !data.password) return;
         this.setSubmiting();
-        Http.post('/login', data).subscribe(
+        Http.post('/auth', data).subscribe(
             (response) => {
-                setAuth(response.data);
+                CookieService.setCookie('auth', response.data.token);
+                User.getInstance().isLoggedIn = true;
+                User.getInstance().data = response.data;
+                SideMenuService.sendUpdate();
                 this.props.history.push('/');
             },
             (err) => {

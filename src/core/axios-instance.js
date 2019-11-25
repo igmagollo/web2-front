@@ -14,15 +14,9 @@ export const Instance = Axios.create({
     baseURL: api,
 });
 
-export const setAuth = (auth = undefined) => {
-    if (auth) {
-        const setCookie = Cookie.getCookie()[1];
-        setCookie('auth', auth);
-        Instance.defaults.headers.common['Authorization'] = Cookie.getCookie()[0].auth;
-    }
-    else {
-        Instance.defaults.headers.common['Authorization'] = Cookie.getCookie()[0].auth;
-    }
+export const setAuth = (auth) => {
+    const setCookie = Cookie.getCookie()[1];
+    setCookie('auth', auth);
 }
 
 

@@ -16,15 +16,19 @@ export default class User {
     }
 
     verifyLogin(callback) {
+        console.log(Cookie.getCookie('auth'));
         if (Cookie.getCookie('auth')) {
-            Http.get('/user').subscribe(
+            Http.get('test-auth/', {
+                headers: {
+                    Authorization: `Token ${Cookie.getCookie('auth')}`
+                }
+            }).subscribe(
                 (response) => {
                     this.date = response.data;
                     this.isLoggedIn = true;
                     callback();
                 },
                 (err) => {
-                    Cookie.setCookie('auth', '');
                     this.isLoggedIn = false;
                     callback();
                 }
@@ -37,5 +41,10 @@ export default class User {
 
     getUserData() {
         return this.data;
+    }
+
+    logout() {
+        this.isLoggedIn = false;
+        Cookie.setCookie('auth', '');
     }
 };

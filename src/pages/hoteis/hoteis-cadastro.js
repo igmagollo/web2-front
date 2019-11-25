@@ -1,20 +1,19 @@
 import React from 'react';
 import User from '../../core/user-service';
-import {SitesReservaService} from '../../services/sites-reserva-service';
-import {Card} from 'primereact/card';
-import {ErrorMessage} from '../../components/error-message/error-message';
-import {LoadingBar} from '../../components/loading-bar/loading-bar';
-import {InputMask} from 'primereact/inputmask';
-import {Button} from 'primereact/button';
-import PropTypes from "prop-types";
-import {withRouter, Redirect} from 'react-router-dom';
 import {FormControl} from '../../classes/form-control';
 import {required} from '../../classes/validations';
 import FormInputText from '../../components/form-input-text/form-input-text';
 import FormInputMask from '../../components/form-input-mask/form-input-mask';
+import {Card} from 'primereact/card';
+import {ErrorMessage} from '../../components/error-message/error-message';
+import {LoadingBar} from '../../components/loading-bar/loading-bar';
+import {Button} from 'primereact/button';
+import PropTypes from "prop-types";
+import {withRouter, Redirect} from 'react-router-dom';
+import {HoteisService} from '../../services/hoteis-service';
 import {PopupMessagesService} from '../../components/popup-messages/popup-messages-service';
 
-class SitesReservasCadastro extends React.Component {
+class HoteisCadastro extends React.Component {
     static propTypes = {
 		match: PropTypes.object.isRequired,
 		location: PropTypes.object.isRequired,
@@ -23,39 +22,32 @@ class SitesReservasCadastro extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.state = {
-            url: new FormControl('', [ required ]),
-            password: new FormControl('', [ required ]),
+            cnpj: new FormControl('', [ required ]),
             nome: new FormControl('', [ required ]),
-            telefone: new FormControl('', [ required ]),
+            password: new FormControl('', [ required ]),
+            cidade: new FormControl('', [ required ]),
             falha_cadastro: false,
             falha_cadastro_texto: '',
             isLoading: false
         };
-        this.service = new SitesReservaService();
+        
+        this.service = new HoteisService();
     }
 
     getFormData() {
         return {
-            url: this.state.url.value,
+            cnpj: this.state.cnpj.value,
             senha: this.state.password.value,
             nome: this.state.nome.value,
-            telefone: this.state.telefone.value
+            cidade: this.state.cidade.value
         }
     }
 
     setValue(field, value) {
         this.state[field].update(value);
         this.setState({});
-    }
-
-    cantSubmit() {
-        return (
-                !this.state.url.isValid() ||
-                !this.state.password.isValid() ||
-                !this.state.nome.isValid() ||
-                !this.state.telefone.isValid()
-            );
     }
 
     setSubmitting() {
@@ -67,6 +59,15 @@ class SitesReservasCadastro extends React.Component {
         this.setState({falha_cadastro: true});
         this.setState({isLoading: false});
         this.setState({falha_cadastro_texto: message});
+    }
+
+    cantSubmit() {
+        return (
+            !this.state.cnpj.isValid() ||
+            !this.state.password.isValid() ||
+            !this.state.nome.isValid() ||
+            !this.state.cidade.isValid()
+        );
     }
 
     submit() {
@@ -89,14 +90,15 @@ class SitesReservasCadastro extends React.Component {
                       User.getInstance().getUserData().tipo != 0 ) &&
                       <Redirect to='/' />
                 }
-                <Card title="Cadastro de Site de Reservas" style={{width: "100%"}}>
+                <Card title="Cadastro de Hotel" style={{width: "100%"}}>
                     <div className="p-grid">
                         <div className="p-col p-col-12 p-md-6 p-lg-3">
-                            <FormInputText 
-                                label="Endereço/URL" 
-                                formControl={this.state.url}
-                                onChange={(e) => this.setValue('url', e.target.value)}
-                                onBlur={(e) => this.setValue('url', e.target.value)}
+                            <FormInputMask
+                                label="CNPJ" 
+                                mask="99.999.999/9999-99"  
+                                formControl={this.state.cnpj}
+                                onChange={(e) => this.setValue('cnpj', e.target.value)}
+                                onBlur={(e) => this.setValue('cnpj', e.target.value)}
                             />
                         </div>
                         <div className="p-col p-col-12 p-md-6 p-lg-3">
@@ -117,12 +119,11 @@ class SitesReservasCadastro extends React.Component {
                             />
                         </div>
                         <div className="p-col p-col-12 p-md-6 p-lg-3">
-                            <FormInputMask
-                                label="Telefone" 
-                                mask="(99) 9?9999-9999"  
-                                formControl={this.state.telefone}
-                                onChange={(e) => this.setValue('telefone', e.target.value)}
-                                onBlur={(e) => this.setValue('telefone', e.target.value)}
+                            <FormInputText 
+                                label="Cidade" 
+                                formControl={this.state.cidade}
+                                onChange={(e) => this.setValue('cidade', e.target.value)}
+                                onBlur={(e) => this.setValue('cidade', e.target.value)}
                             />
                         </div>
                         <div className="p-col p-col-12">
@@ -143,4 +144,5 @@ class SitesReservasCadastro extends React.Component {
     }
 }
 
-export default withRouter(SitesReservasCadastro);
+export default withRouter(HoteisCadastro);
+

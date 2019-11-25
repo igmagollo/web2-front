@@ -12,7 +12,7 @@ export class TopMenu extends React.Component {
 					command: () => { SideMenuService.showMenu(); }
 				},
 				{
-					label: '3 Vago'
+					label: 'TRÊSVAGO'
 				}
 			],
 		};

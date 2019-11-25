@@ -7,6 +7,10 @@ import Bootstrap from './pages/bootstrap/bootstrap';
 import {TopMenu} from './components/top-menu/top-menu.js';
 import SitesReservas from './pages/sites-reservas/sites-reservas.js';
 import SitesReservasCadastro from './pages/sites-reservas/sites-reservas-cadastro';
+import HoteisCadastro from './pages/hoteis/hoteis-cadastro';
+import PromocoesCadastro from './pages/promocoes/promocoes-cadastro';
+import {PopupMessages} from './components/popup-messages/popup-messages';
+
 import {
   Switch,
   Route
@@ -20,6 +24,7 @@ import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 
 import './App.css';
+
 
 
 class App extends React.Component {
@@ -46,11 +51,14 @@ class App extends React.Component {
       <div>
         <TopMenu />
         <SideMenu />
+        <PopupMessages />
         <Switch>
           <Route exact path="/" component={Home}/>
           <Route exact path="/login" component={login}/>
           <Route exact path="/sites-reservas" component={SitesReservas}/>
           <Route exact path="/sites-reservas/cadastro" component={SitesReservasCadastro}/>
+          <Route exact path="/hoteis/cadastro" component={HoteisCadastro}/>
+          <Route exact path="/promocoes/cadastro" component={PromocoesCadastro}/>
         </Switch>
       </div>
     );
