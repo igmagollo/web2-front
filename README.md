@@ -1,3 +1,9 @@
+# Front-end do trabalho da disciplina de desenvolvimento web 2
+
+- Back-end disponível em: [https://github.com/olivatooo/web2-back](https://github.com/olivatooo/web2-back)
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
